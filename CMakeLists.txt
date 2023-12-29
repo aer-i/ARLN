@@ -1,11 +1,12 @@
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.15)
 
 project(Arln)
+find_package(Vulkan REQUIRED)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-option(ARLN_BUILD_EXAMPLES "build examples" OFF)
+option(ARLN_BUILD_EXAMPLES "build examples" ON)
 
 set(SOURCES
 "ARLN/ArlnWindow.cpp"
@@ -33,13 +34,12 @@ set(SDL_TEST OFF CACHE BOOL "" FORCE)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/volk)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/SDL)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/glm)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/Vulkan-Headers)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanMemoryAllocator)
 
 add_library(ARLN STATIC ${SOURCES})
 
 target_include_directories(ARLN PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ARLN/ ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/)
-target_link_libraries(ARLN PUBLIC Vulkan::Headers)
+target_include_directories(ARLN PUBLIC ${Vulkan_INCLUDE_DIR}/)
 target_link_libraries(ARLN PUBLIC volk SDL3::SDL3-static GPUOpen::VulkanMemoryAllocator glm::glm)
 
 if (ARLN_BUILD_EXAMPLES)

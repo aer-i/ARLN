@@ -34,6 +34,7 @@ namespace arln {
         auto allocateImage(u32 t_width, u32 t_height, Format t_format, ImageUsage t_usage, MemoryType t_memoryType) noexcept -> Image;
         auto createDescriptorPool() noexcept -> DescriptorPool;
         auto createSampler(SamplerOptions const& t_options = {}) noexcept -> Sampler;
+        auto findSupportedFormat(const std::vector<Format>& t_formats, ImageTiling t_tiling, FormatFeatures t_features) noexcept -> Format;
 
         inline auto  getAllocator()               const noexcept { return m_allocator;            }
         inline auto  getInstance()                const noexcept { return m_instance;             }
@@ -44,8 +45,9 @@ namespace arln {
         inline auto  getGraphicsQueue()           const noexcept { return m_graphicsQueue;        }
         inline auto  getPresentQueue()            const noexcept { return m_presentQueue;         }
         inline auto  getSurfacePresentMode()      const noexcept { return m_surfacePresentMode;   }
-        inline auto  getSurfaceExtent()           const noexcept { return m_surfaceExtent;        }
         inline auto  getQueueIndex()              const noexcept { return m_queueFamilyIndex;     }
+        inline auto  getDefaultColorFormat()      const noexcept { return m_colorFormat;          }
+        inline auto  getDefaultDepthFormat()      const noexcept { return m_depthFormat;          }
         inline auto  getHeight()                  const noexcept { return m_getHeightFunc();      }
         inline auto  getWidth()                   const noexcept { return m_getWidthFunc();       }
         inline auto  isMeshShaderSupported()      const noexcept { return m_meshShaderSupported;  }
@@ -54,7 +56,6 @@ namespace arln {
         inline auto& getInfoCallback()            const noexcept { return m_infoCallback;         }
         inline auto& getErrorCallback()           const noexcept { return m_errorCallback;        }
         inline auto& getPresentImage()                  noexcept { return m_swapchain.getImage(); }
-        inline auto& getPresentFormat()           const noexcept { return m_swapchain.getFormat();}
         inline auto& getSwapchain()                     noexcept { return m_swapchain;            }
         inline auto& getFrame()                         noexcept { return m_frame;                }
 
@@ -84,7 +85,8 @@ namespace arln {
         VkFence                               m_immediateFence          { };
         VkSurfaceCapabilitiesKHR              m_surfaceCapabilities     { };
         PresentMode                           m_surfacePresentMode      { };
-        VkExtent2D                            m_surfaceExtent           { };
+        Format                                m_colorFormat             { };
+        Format                                m_depthFormat             { };
         VkPhysicalDeviceProperties2           m_physicalDeviceProperties{ };
         VkPhysicalDeviceFeatures2             m_physicalDeviceFeatures  { };
         u32                                   m_queueFamilyIndex        { };

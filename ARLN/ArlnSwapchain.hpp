@@ -19,16 +19,14 @@ namespace arln {
         void teardown() noexcept;
         void recreate() noexcept;
 
-        inline auto  getHandle()     const { return m_handle;                }
-        inline auto  getImageIndex() const { return m_imageIndex;            }
-        inline auto& getFormat()     const { return m_format.format;         }
-        inline auto& getExtent()     const { return m_extent;                }
-        inline auto& getImage()      const { return m_images[m_imageIndex];  }
+        inline auto getHandle()     const -> VkSwapchainKHR { return m_handle;               }
+        inline auto getImageIndex() const -> u32            { return m_imageIndex;           }
+        inline auto getExtent()     const -> VkExtent2D     { return m_extent;               }
+        inline auto getImage()            -> Image&         { return m_images[m_imageIndex]; }
 
     private:
         VkSwapchainKHR           m_handle{ };
         VkExtent2D               m_extent;
-        VkSurfaceFormatKHR       m_format;
         std::vector<Image>       m_images;
         u32                      m_imageIndex;
     };

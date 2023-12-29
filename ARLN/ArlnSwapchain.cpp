@@ -29,33 +29,7 @@ namespace arln {
 
     void Swapchain::create() noexcept
     {
-        m_format = [&]()
-        {
-            uint32_t count;
-            vkGetPhysicalDeviceSurfaceFormatsKHR(CurrentContext()->getPhysicalDevice(), CurrentContext()->getSurface(), &count, nullptr);
-            std::vector<VkSurfaceFormatKHR> availableFormats(count);
-            vkGetPhysicalDeviceSurfaceFormatsKHR(CurrentContext()->getPhysicalDevice(), CurrentContext()->getSurface(), &count, availableFormats.data());
 
-            if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED)
-            {
-                return VkSurfaceFormatKHR{ VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
-            }
-            for (const auto& currentFormat : availableFormats)
-            {
-                if (currentFormat.format == VK_FORMAT_R8G8B8A8_UNORM && currentFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-                {
-                    return currentFormat;
-                }
-            }
-            for (const auto& currentFormat : availableFormats)
-            {
-                if (currentFormat.format == VK_FORMAT_B8G8R8A8_UNORM && currentFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
-                {
-                    return currentFormat;
-                }
-            }
-            return availableFormats[0];
-        }();
 
         VkSurfaceCapabilitiesKHR capabilities;
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(CurrentContext()->getPhysicalDevice(), CurrentContext()->getSurface(), &capabilities);
@@ -75,10 +49,10 @@ namespace arln {
         swapchainCreateInfo.preTransform     = VK_SURFACE_TRANSFORM_IDENTITY_BIT_KHR;
         swapchainCreateInfo.imageUsage       = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT;
         swapchainCreateInfo.compositeAlpha   = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
-        swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        swapchainCreateInfo.imageColorSpace  = VK_COLOR_SPACE_SRGB_NONLINEAR_KHR;
         swapchainCreateInfo.surface          = CurrentContext()->getSurface();
-        swapchainCreateInfo.imageColorSpace  = m_format.colorSpace;
-        swapchainCreateInfo.imageFormat      = m_format.format;
+        swapchainCreateInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        swapchainCreateInfo.imageFormat      = static_cast<VkFormat>(CurrentContext()->getDefaultColorFormat());
         swapchainCreateInfo.presentMode      = presentMode;
         swapchainCreateInfo.imageExtent      = m_extent;
         swapchainCreateInfo.oldSwapchain     = nullptr;
@@ -104,7 +78,7 @@ namespace arln {
             imageViewCreateInfo.pNext = nullptr;
             imageViewCreateInfo.flags = 0;
             imageViewCreateInfo.image = images[i];
-            imageViewCreateInfo.format = m_format.format;
+            imageViewCreateInfo.format = static_cast<VkFormat>(CurrentContext()->getDefaultColorFormat());
             imageViewCreateInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
             imageViewCreateInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
             imageViewCreateInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;

@@ -228,7 +228,6 @@ namespace arln {
         this->selectPhysicalDevice();
 
         vkGetPhysicalDeviceSurfaceCapabilitiesKHR(m_physicalDevice, m_surface, &m_surfaceCapabilities);
-        m_surfaceExtent = m_surfaceCapabilities.currentExtent;
 
         m_infoCallback(std::string("Selected queue family index: " + std::to_string(m_queueFamilyIndex)));
         m_infoCallback(std::string("Selected physical device: ") + m_physicalDeviceProperties.properties.deviceName);
@@ -282,6 +281,44 @@ namespace arln {
             m_errorCallback("Failed to create vulkan fence");
         }
 
+        auto surfaceFormat = [&]()
+        {
+            uint32_t count;
+            vkGetPhysicalDeviceSurfaceFormatsKHR(CurrentContext()->getPhysicalDevice(), CurrentContext()->getSurface(), &count, nullptr);
+            std::vector<VkSurfaceFormatKHR> availableFormats(count);
+            vkGetPhysicalDeviceSurfaceFormatsKHR(CurrentContext()->getPhysicalDevice(), CurrentContext()->getSurface(), &count, availableFormats.data());
+
+            if (availableFormats.size() == 1 && availableFormats[0].format == VK_FORMAT_UNDEFINED)
+            {
+                m_colorFormat = Format::eR8G8B8A8Unorm;
+                return VkSurfaceFormatKHR{ VK_FORMAT_R8G8B8A8_UNORM, VK_COLOR_SPACE_SRGB_NONLINEAR_KHR };
+            }
+            for (const auto& currentFormat : availableFormats)
+            {
+                if (currentFormat.format == VK_FORMAT_R8G8B8A8_UNORM && currentFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    m_colorFormat = Format::eR8G8B8A8Unorm;
+                    return currentFormat;
+                }
+            }
+            for (const auto& currentFormat : availableFormats)
+            {
+                if (currentFormat.format == VK_FORMAT_B8G8R8A8_UNORM && currentFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+                {
+                    m_colorFormat = Format::eB8G8R8A8Unorm;
+                    return currentFormat;
+                }
+            }
+            return availableFormats[0];
+        }();
+
+        m_colorFormat = static_cast<Format>(surfaceFormat.format);
+        m_depthFormat = findSupportedFormat({
+            Format::eD16Unorm, Format::eD32Sfloat, Format::eD32SfloatS8Uint, Format::eD24UnormS8Uint
+            },
+            ImageTiling::eOptimal,
+            FormatFeaturesBits::eDepthStencilAttachment
+        );
         m_swapchain.create();
         m_frame.create();
 
@@ -580,5 +617,24 @@ namespace arln {
             m_errorCallback("Failed to create vulkan memory allocator");
         }
         m_infoCallback("Created vulkan memory allocator");
+    }
+
+    auto Context::findSupportedFormat(const std::vector<Format>& t_formats, ImageTiling t_tiling, FormatFeatures t_features) noexcept -> Format
+    {
+        for (auto& format : t_formats)
+        {
+            VkFormatProperties properties;
+            vkGetPhysicalDeviceFormatProperties(m_physicalDevice, static_cast<VkFormat>(format), &properties);
+
+            if (t_tiling == ImageTiling::eOptimal && (properties.optimalTilingFeatures & t_features) == t_features)
+            {
+                return format;
+            }
+            if (t_tiling == ImageTiling::eLinear && (properties.linearTilingFeatures & t_features) == t_features)
+            {
+                return format;
+            }
+        }
+        return Format::eUndefined;
     }
 }

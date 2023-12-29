@@ -208,7 +208,7 @@ namespace arln {
         }
         else
         {
-            colorFormats.emplace_back(CurrentContext()->getSwapchain().getFormat());
+            colorFormats.emplace_back(static_cast<VkFormat>(CurrentContext()->getDefaultColorFormat()));
         }
 
         VkPipelineRenderingCreateInfo renderingCreateInfo{ VK_STRUCTURE_TYPE_PIPELINE_RENDERING_CREATE_INFO };

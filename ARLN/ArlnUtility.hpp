@@ -34,6 +34,7 @@ namespace arln {
     using ShaderStage = u32;
     using BufferUsage = u32;
     using ImageUsage = u32;
+    using FormatFeatures = u32;
     using PipelineStage = u64;
     using Access = u64;
 
@@ -155,6 +156,39 @@ namespace arln {
         };
     };
 
+    struct FormatFeaturesBits
+    {
+        FormatFeaturesBits() = delete;
+        ~FormatFeaturesBits() = delete;
+
+        enum Bits : FormatFeatures
+        {
+            eSampledImage = 0x00000001,
+            eStorageImage = 0x00000002,
+            eStorageImageAtomic = 0x00000004,
+            eUniformTexelBuffer = 0x00000008,
+            eStorageTexelBuffer= 0x00000010,
+            eStorageTexelBufferAtomic = 0x00000020,
+            eVertexBuffer = 0x00000040,
+            eColorAttachment = 0x00000080,
+            eColorAttachmentBlend = 0x00000100,
+            eDepthStencilAttachment = 0x00000200,
+            eBlitSrc = 0x00000400,
+            eBlitDst = 0x00000800,
+            eSampledImageFilterLinear = 0x00001000,
+            eTransferSrc = 0x00004000,
+            eTransferDst = 0x00008000,
+            eMidpointChromaSamples = 0x00020000,
+            eSampledImageYcbcrConversionLinearFilter = 0x00040000,
+            eSampledImageYcbcrConversionSEPARATE_RECONSTRUCTION_FILTER = 0x00080000,
+            eSampledImageYcbcrConversionChromaReconstructionExplicit = 0x00100000,
+            eSampledImageYcbcrConversionChromaReconstructionExplicitForceable = 0x00200000,
+            eDISJOINT = 0x00400000,
+            eCositedChromaSamples = 0x00800000,
+            eSampledImageFilterMinmax = 0x00010000,
+        };
+    };
+
     enum class ImageLayout : u32
     {
         eUndefined = 0,
@@ -210,6 +244,12 @@ namespace arln {
     enum class Filter : u32
     {
         eNearest = 0,
+        eLinear = 1
+    };
+
+    enum class ImageTiling : u32
+    {
+        eOptimal = 0,
         eLinear = 1
     };
 
@@ -463,7 +503,7 @@ namespace arln {
         std::string_view meshShaderPath;
         std::string_view taskShaderPath;
         std::vector<Format> colorFormats;
-        Format depthFormat = Format::eD16Unorm;
+        Format depthFormat = Format::eUndefined;
         Format stencilFormat = Format::eUndefined;
         PolygonMode polygonMode = PolygonMode::eFill;
         FrontFace frontFace = FrontFace::eCounterClockwise;
