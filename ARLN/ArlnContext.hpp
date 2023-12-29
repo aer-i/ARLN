@@ -54,6 +54,7 @@ namespace arln {
         inline auto& getInfoCallback()            const noexcept { return m_infoCallback;         }
         inline auto& getErrorCallback()           const noexcept { return m_errorCallback;        }
         inline auto& getPresentImage()                  noexcept { return m_swapchain.getImage(); }
+        inline auto& getPresentFormat()           const noexcept { return m_swapchain.getFormat();}
         inline auto& getSwapchain()                     noexcept { return m_swapchain;            }
         inline auto& getFrame()                         noexcept { return m_frame;                }
 

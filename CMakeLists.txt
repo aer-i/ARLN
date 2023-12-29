@@ -39,8 +39,8 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/vendor/VulkanMemoryAllocator)
 add_library(ARLN STATIC ${SOURCES})
 
 target_include_directories(ARLN PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/ARLN/ ${CMAKE_CURRENT_SOURCE_DIR}/vendor/imgui/)
-target_include_directories(ARLN PRIVATE ${Vulkan_INCLUDE_DIR})
-target_link_libraries(ARLN PUBLIC volk Vulkan::Headers SDL3::SDL3-static GPUOpen::VulkanMemoryAllocator glm::glm)
+target_link_libraries(ARLN PUBLIC Vulkan::Headers)
+target_link_libraries(ARLN PUBLIC volk SDL3::SDL3-static GPUOpen::VulkanMemoryAllocator glm::glm)
 
 if (ARLN_BUILD_EXAMPLES)
     add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/examples)

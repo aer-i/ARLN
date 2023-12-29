@@ -19,11 +19,11 @@ namespace arln {
         void teardown() noexcept;
         void recreate() noexcept;
 
-        inline auto  getHandle()     const { return m_handle;               }
-        inline auto  getImageIndex() const { return m_imageIndex;           }
-        inline auto  getImage() -> Image&      { return m_images[m_imageIndex]; }
-        inline auto& getFormat()     const { return m_format;               }
-        inline auto& getExtent()     const { return m_extent;               }
+        inline auto  getHandle()     const { return m_handle;                }
+        inline auto  getImageIndex() const { return m_imageIndex;            }
+        inline auto& getFormat()     const { return m_format.format;         }
+        inline auto& getExtent()     const { return m_extent;                }
+        inline auto& getImage()      const { return m_images[m_imageIndex];  }
 
     private:
         VkSwapchainKHR           m_handle{ };

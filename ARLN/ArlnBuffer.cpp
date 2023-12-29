@@ -17,7 +17,7 @@ namespace arln {
         bufferCreateInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
         bufferCreateInfo.pNext = nullptr;
         bufferCreateInfo.flags = 0;
-        bufferCreateInfo.usage = t_usage | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT;
+        bufferCreateInfo.usage = t_usage | VK_BUFFER_USAGE_SHADER_DEVICE_ADDRESS_BIT | 1 | 2;
         bufferCreateInfo.size = t_size;
         bufferCreateInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
         bufferCreateInfo.queueFamilyIndexCount = 0;
@@ -29,22 +29,18 @@ namespace arln {
         switch (t_memoryType)
         {
             case MemoryType::eGpu:
-                bufferCreateInfo.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
                 allocationCreateInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
                                              VMA_ALLOCATION_CREATE_HOST_ACCESS_ALLOW_TRANSFER_INSTEAD_BIT |
                                              VMA_ALLOCATION_CREATE_MAPPED_BIT;
                 break;
             case MemoryType::eGpuOnly:
-                bufferCreateInfo.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
                 allocationCreateInfo.usage = VMA_MEMORY_USAGE_GPU_ONLY;
                 allocationCreateInfo.requiredFlags = VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT;
                 break;
             case MemoryType::eDedicated:
-                bufferCreateInfo.usage |= VK_BUFFER_USAGE_TRANSFER_DST_BIT;
                 allocationCreateInfo.flags = VMA_ALLOCATION_CREATE_DEDICATED_MEMORY_BIT;
                 break;
             case MemoryType::eCpu:
-                bufferCreateInfo.usage |= VK_BUFFER_USAGE_TRANSFER_SRC_BIT;
                 allocationCreateInfo.flags = VMA_ALLOCATION_CREATE_HOST_ACCESS_SEQUENTIAL_WRITE_BIT |
                                              VMA_ALLOCATION_CREATE_MAPPED_BIT;
                 break;
@@ -63,6 +59,8 @@ namespace arln {
         {
             CurrentContext()->getErrorCallback()("Failed to allocate buffer");
         }
+
+        vmaGetAllocationMemoryProperties(CurrentContext()->getAllocator(), m_allocation, &m_allocationInfo.memoryType);
 
         VkBufferDeviceAddressInfo bufferDeviceAddressInfo;
         bufferDeviceAddressInfo.sType = VK_STRUCTURE_TYPE_BUFFER_DEVICE_ADDRESS_INFO;
