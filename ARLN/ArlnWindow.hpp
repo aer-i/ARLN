@@ -41,6 +41,7 @@ namespace arln {
         bool getKeyUp(Key t_key) noexcept;
 
         inline void setShouldClose(bool t_shouldClose = true) { m_shouldClose = t_shouldClose; }
+        inline void setRelativeMouseMode(bool t_enable = true) { SDL_SetRelativeMouseMode(t_enable); }
 
         [[nodiscard]] inline auto getHandle()        const noexcept { return m_handle;        }
         [[nodiscard]] inline auto shouldClose()      const noexcept { return m_shouldClose;   }
