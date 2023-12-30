@@ -42,16 +42,21 @@ namespace arln {
 
         inline void setShouldClose(bool t_shouldClose = true) { m_shouldClose = t_shouldClose; }
         inline void setRelativeMouseMode(bool t_enable = true) { SDL_SetRelativeMouseMode(t_enable); }
+        inline auto getRelativeMouseMode() -> bool { return static_cast<bool>(SDL_GetRelativeMouseMode()); }
 
-        [[nodiscard]] inline auto getHandle()        const noexcept { return m_handle;        }
-        [[nodiscard]] inline auto shouldClose()      const noexcept { return m_shouldClose;   }
-        [[nodiscard]] inline auto getWidth()         const noexcept { return m_size.x;        }
-        [[nodiscard]] inline auto getHeight()        const noexcept { return m_size.y;        }
-        [[nodiscard]] inline auto getFps()           const noexcept { return m_fps;           }
-        [[nodiscard]] inline auto getSize()          const noexcept { return m_size;          }
-        [[nodiscard]] inline auto getTitle()         const noexcept { return m_title.c_str(); }
-        [[nodiscard]] inline auto getCursorOffsetX() const noexcept { return m_cursorOffsetX; }
-        [[nodiscard]] inline auto getCursorOffsetY() const noexcept { return m_cursorOffsetY; }
+        [[nodiscard]] inline auto getHandle()        const noexcept { return m_handle;            }
+        [[nodiscard]] inline auto shouldClose()      const noexcept { return m_shouldClose;       }
+        [[nodiscard]] inline auto getWidth()         const noexcept { return m_size.x;            }
+        [[nodiscard]] inline auto getHeight()        const noexcept { return m_size.y;            }
+        [[nodiscard]] inline auto getFps()           const noexcept { return m_fps;               }
+        [[nodiscard]] inline auto getSize()          const noexcept { return m_size;              }
+        [[nodiscard]] inline auto getTitle()         const noexcept { return m_title.c_str();     }
+        [[nodiscard]] inline auto getCursorOffsetX() const noexcept { return m_cursorOffset.x;    }
+        [[nodiscard]] inline auto getCursorOffsetY() const noexcept { return m_cursorOffset.y;    }
+        [[nodiscard]] inline auto getCursorX()       const noexcept { return m_cursorPos.x;       }
+        [[nodiscard]] inline auto getCursorY()       const noexcept { return m_cursorPos.y;       }
+        [[nodiscard]] inline auto getGlobalCursorX() const noexcept { return m_globalCursorPos.x; }
+        [[nodiscard]] inline auto getGlobalCursorY() const noexcept { return m_globalCursorPos.y; }
 
     private:
         SDL_Window* m_handle{ nullptr };
@@ -60,8 +65,9 @@ namespace arln {
         std::string m_title;
         u8* m_keyboardState{ nullptr };
         u32 m_fps{ 0 };
-        f32 m_cursorOffsetX{ };
-        f32 m_cursorOffsetY{ };
+        vec2 m_cursorPos;
+        vec2 m_cursorOffset;
+        vec2 m_globalCursorPos;
         bool m_shouldClose{ false };
     };
 

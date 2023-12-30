@@ -44,8 +44,6 @@ namespace arln {
 
     void Window::pollEvents() noexcept
     {
-        m_cursorOffsetX = m_cursorOffsetY = 0;
-
         while (SDL_PollEvent(&m_event))
         {
             if (ImguiContext::IsCreated())
@@ -67,13 +65,15 @@ namespace arln {
                 SDL_GetWindowSize(m_handle, (i32*)&m_size.x, (i32*)&m_size.y);
                 break;
             case SDL_EVENT_MOUSE_MOTION:
-                m_cursorOffsetX = m_event.motion.xrel;
-                m_cursorOffsetY = m_event.motion.yrel;
+                SDL_GetMouseState(&m_cursorPos.x, &m_cursorPos.y);
+                SDL_GetGlobalMouseState(&m_globalCursorPos.x, &m_globalCursorPos.y);
                 break;
             default:
                 break;
             }
         }
+
+        SDL_GetRelativeMouseState(&m_cursorOffset.x, &m_cursorOffset.y);
 
         static f64 previousTime = 0.0;
         static u32 frames = 0;
