@@ -32,6 +32,8 @@ namespace arln {
         {
             SDL_SetWindowPosition(m_handle, t_createInfo.position.x, t_createInfo.position.y);
         }
+
+        m_keyboardState = (u8*)SDL_GetKeyboardState(nullptr);
     }
 
     Window::~Window()
@@ -42,16 +44,16 @@ namespace arln {
 
     void Window::pollEvents() noexcept
     {
-        SDL_Event event;
+        m_cursorOffsetX = m_cursorOffsetY = 0;
 
-        while (SDL_PollEvent(&event))
+        while (SDL_PollEvent(&m_event))
         {
             if (ImguiContext::IsCreated())
             {
-                ImGui_ImplSDL3_ProcessEvent(&event);
+                ImGui_ImplSDL3_ProcessEvent(&m_event);
             }
 
-            switch (event.type)
+            switch (m_event.type)
             {
             case SDL_EVENT_QUIT:
                 m_shouldClose = true;
@@ -63,6 +65,10 @@ namespace arln {
             case SDL_EVENT_WINDOW_RESIZED:
             case SDL_EVENT_WINDOW_RESTORED:
                 SDL_GetWindowSize(m_handle, (i32*)&m_size.x, (i32*)&m_size.y);
+                break;
+            case SDL_EVENT_MOUSE_MOTION:
+                m_cursorOffsetX = m_event.motion.xrel;
+                m_cursorOffsetY = m_event.motion.yrel;
                 break;
             default:
                 break;
@@ -134,12 +140,12 @@ namespace arln {
         SDL_SetWindowTitle(m_handle, m_title.c_str());
     }
 
-    bool Window::isKeyPressed(Key t_key) noexcept
+    auto Window::getKey(Key t_key) noexcept -> bool
     {
         return m_keyboardState[static_cast<i32>(t_key)];
     }
 
-    bool Window::isKeyDown(Key t_key) noexcept
+    auto Window::getKeyDown(arln::Key t_key) noexcept -> bool
     {
         static bool prevKeyboardState[SDL_NUM_SCANCODES] = { false };
 
@@ -148,7 +154,7 @@ namespace arln {
             prevKeyboardState[static_cast<i32>(t_key)] = true;
             return true;
         }
-        else if (!m_keyboardState[static_cast<i32>(t_key)])
+        if (!m_keyboardState[static_cast<i32>(t_key)])
         {
             prevKeyboardState[static_cast<i32>(t_key)] = false;
         }
@@ -156,7 +162,7 @@ namespace arln {
         return false;
     }
 
-    bool Window::isKeyUp(Key t_key) noexcept
+    auto Window::getKeyUp(Key t_key) noexcept -> bool
     {
         static bool prevKeyboardState[SDL_NUM_SCANCODES] = { false };
 
@@ -165,7 +171,7 @@ namespace arln {
             prevKeyboardState[static_cast<i32>(t_key)] = false;
             return true;
         }
-        else if (m_keyboardState[static_cast<i32>(t_key)])
+        if (m_keyboardState[static_cast<i32>(t_key)])
         {
             prevKeyboardState[static_cast<i32>(t_key)] = true;
         }

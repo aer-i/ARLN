@@ -36,28 +36,31 @@ namespace arln {
         auto getPosition() const noexcept -> ivec2;
         void setSize(ivec2 const& t_size) noexcept;
         void setTitle(std::string_view t_tile) noexcept;
-        bool isKeyPressed(Key t_key) noexcept;
-        bool isKeyDown(Key t_key) noexcept;
-        bool isKeyUp(Key t_key) noexcept;
+        bool getKey(Key t_key) noexcept;
+        bool getKeyDown(Key t_key) noexcept;
+        bool getKeyUp(Key t_key) noexcept;
 
-        inline void setMaxFps(u32 t_limit = 0)                { m_fpsLimit = t_limit;          }
         inline void setShouldClose(bool t_shouldClose = true) { m_shouldClose = t_shouldClose; }
 
-        inline auto getHandle()   const -> SDL_Window*        { return m_handle;               }
-        inline auto shouldClose() const -> bool               { return m_shouldClose;          }
-        inline auto getWidth()    const -> u32                { return m_size.x;               }
-        inline auto getHeight()   const -> u32                { return m_size.y;               }
-        inline auto getFps()      const -> u32                { return m_fps;                  }
-        inline auto getSize()     const -> vec2               { return m_size;                 }
-        inline auto getTitle()    const -> const char*        { return m_title.c_str();        }
+        [[nodiscard]] inline auto getHandle()        const noexcept { return m_handle;        }
+        [[nodiscard]] inline auto shouldClose()      const noexcept { return m_shouldClose;   }
+        [[nodiscard]] inline auto getWidth()         const noexcept { return m_size.x;        }
+        [[nodiscard]] inline auto getHeight()        const noexcept { return m_size.y;        }
+        [[nodiscard]] inline auto getFps()           const noexcept { return m_fps;           }
+        [[nodiscard]] inline auto getSize()          const noexcept { return m_size;          }
+        [[nodiscard]] inline auto getTitle()         const noexcept { return m_title.c_str(); }
+        [[nodiscard]] inline auto getCursorOffsetX() const noexcept { return m_cursorOffsetX; }
+        [[nodiscard]] inline auto getCursorOffsetY() const noexcept { return m_cursorOffsetY; }
 
     private:
         SDL_Window* m_handle{ nullptr };
+        SDL_Event m_event{ };
         uvec2 m_size;
         std::string m_title;
         u8* m_keyboardState{ nullptr };
-        u32 m_fpsLimit{ 0 };
         u32 m_fps{ 0 };
+        f32 m_cursorOffsetX{ };
+        f32 m_cursorOffsetY{ };
         bool m_shouldClose{ false };
     };
 
