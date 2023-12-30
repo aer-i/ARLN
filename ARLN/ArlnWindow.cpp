@@ -8,7 +8,7 @@
 namespace arln {
 
     Window::Window(arln::WindowCreateInfo const& t_createInfo)
-        : m_size{ t_createInfo.size }, m_title{ t_createInfo.title }
+        : m_title{ t_createInfo.title }
     {
         if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0)
         {
@@ -17,8 +17,8 @@ namespace arln {
 
         m_handle = SDL_CreateWindow(
             m_title.c_str(),
-            static_cast<i32>(m_size.x),
-            static_cast<i32>(m_size.y),
+            static_cast<i32>(t_createInfo.size.x),
+            static_cast<i32>(t_createInfo.size.y),
             SDL_WINDOW_VULKAN |
             (t_createInfo.resizable ? SDL_WINDOW_RESIZABLE : 0)
         );
@@ -33,6 +33,7 @@ namespace arln {
             SDL_SetWindowPosition(m_handle, t_createInfo.position.x, t_createInfo.position.y);
         }
 
+        SDL_GetWindowSize(m_handle, (i32*)&m_size.x, (i32*)&m_size.y);
         m_keyboardState = (u8*)SDL_GetKeyboardState(nullptr);
     }
 

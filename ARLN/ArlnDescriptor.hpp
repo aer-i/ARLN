@@ -1,4 +1,5 @@
 #pragma once
+#include <deque>
 #include "ArlnUtility.hpp"
 
 namespace arln {
@@ -70,8 +71,8 @@ namespace arln {
         void clear() noexcept;
 
     private:
-        std::vector<VkDescriptorBufferInfo> m_bufferInfos;
-        std::vector<VkDescriptorImageInfo> m_imageInfos;
+        std::deque<VkDescriptorBufferInfo> m_bufferInfos;
+        std::deque<VkDescriptorImageInfo> m_imageInfos;
         std::vector<VkWriteDescriptorSet> m_writes;
     };
 }

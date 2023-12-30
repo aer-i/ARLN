@@ -33,7 +33,7 @@ auto main() -> int
 
     auto commandBuffer = context.allocateCommandBuffer();
     auto imguiCommandBuffer = context.allocateCommandBuffer();
-    auto renderAttachment = context.allocateImage(1, 1, Format::eR8G8B8A8Unorm, ImageUsageBits::eColorAttachment | ImageUsageBits::eSampled, MemoryType::eCpu);
+    auto renderAttachment = context.allocateImage(1, 1, context.getDefaultColorFormat(), ImageUsageBits::eColorAttachment | ImageUsageBits::eSampled, MemoryType::eCpu);
     auto imguiDescriptor = ImguiContext::CreateImguiImage(renderAttachment);
 
     ImVec2 currentSize = { 1, 1 };
@@ -76,7 +76,7 @@ auto main() -> int
             if ((viewportSize.x != currentSize.x || viewportSize.y != currentSize.y) && (viewportSize.x > 0 && viewportSize.y > 0))
             {
                 currentSize = viewportSize;
-                renderAttachment.recreate((u32)viewportSize.x, (u32)viewportSize.y, Format::eR8G8B8A8Unorm, ImageUsageBits::eColorAttachment | ImageUsageBits::eSampled, MemoryType::eGpu);
+                renderAttachment.recreate((u32)viewportSize.x, (u32)viewportSize.y, context.getDefaultColorFormat(), ImageUsageBits::eColorAttachment | ImageUsageBits::eSampled, MemoryType::eGpu);
                 ImguiContext::RecreateImguiImage(renderAttachment, imguiDescriptor);
             }
 
