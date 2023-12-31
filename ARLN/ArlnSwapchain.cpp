@@ -41,8 +41,8 @@ namespace arln {
             presentMode = static_cast<VkPresentModeKHR>(CurrentContext()->getSurfacePresentMode());
         }
 
-        m_extent.width = std::clamp(CurrentContext()->getWidth(), capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
-        m_extent.height = std::clamp(CurrentContext()->getHeight(), capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+        m_extent.width = std::clamp(CurrentContext()->getWindowWidth(), capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+        m_extent.height = std::clamp(CurrentContext()->getWindowHeight(), capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
 
         VkSwapchainCreateInfoKHR swapchainCreateInfo{ VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR };
         swapchainCreateInfo.minImageCount    = std::max(3u, CurrentContext()->getSurfaceCapabilities().minImageCount);
@@ -127,6 +127,6 @@ namespace arln {
         teardown();
         create();
 
-        CurrentContext()->getResizeCallback()(CurrentContext()->getWidth(), CurrentContext()->getHeight());
+        CurrentContext()->getResizeCallback()(m_extent.width, m_extent.height);
     }
 }

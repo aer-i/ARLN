@@ -37,7 +37,7 @@ namespace arln {
 
     auto Context::canRender() noexcept -> bool
     {
-        if (getWidth() == 0 || getHeight() == 0)
+        if (getWindowWidth() == 0 || getWindowHeight() == 0)
         {
             return false;
         }

@@ -71,7 +71,7 @@ auto main() -> int
             .write();
     };
 
-    onResize(window.getWidth(), window.getHeight());
+    onResize(context.getCurrentExtent().x, context.getCurrentExtent().y);
     context.setResizeCallback(onResize);
 
     while (!window.shouldClose())
@@ -106,8 +106,8 @@ auto main() -> int
 
                 commandBuffer.bindComputePipeline(computePipeline);
                 commandBuffer.bindDescriptorCompute(computePipeline, descriptor);
-                commandBuffer.dispatch(static_cast<u32>(std::ceil(f32(w) / 16.f)),
-                                       static_cast<u32>(std::ceil(f32(h) / 16.f)), 1);
+                commandBuffer.dispatch(static_cast<u32>(std::ceil(f32(context.getCurrentExtent().x) / 16.f)),
+                                       static_cast<u32>(std::ceil(f32(context.getCurrentExtent().y) / 16.f)), 1);
 
                 commandBuffer.transitionImages({
                     ImageTransitionInfo{

@@ -36,6 +36,14 @@ namespace arln {
         auto createSampler(SamplerOptions const& t_options = {}) noexcept -> Sampler;
         auto findSupportedFormat(const std::vector<Format>& t_formats, ImageTiling t_tiling, FormatFeatures t_features) noexcept -> Format;
 
+
+        inline auto& getPresentImage()                  noexcept { return m_swapchain.getImage(); }
+        inline auto& getSwapchain()                     noexcept { return m_swapchain;            }
+        inline auto& getFrame()                         noexcept { return m_frame;                }
+        inline auto& getSurfaceCapabilities()     const noexcept { return m_surfaceCapabilities;  }
+        inline auto& getResizeCallback()          const noexcept { return m_resizeCallback;       }
+        inline auto& getInfoCallback()            const noexcept { return m_infoCallback;         }
+        inline auto& getErrorCallback()           const noexcept { return m_errorCallback;        }
         inline auto  getAllocator()               const noexcept { return m_allocator;            }
         inline auto  getInstance()                const noexcept { return m_instance;             }
         inline auto  getSurface()                 const noexcept { return m_surface;              }
@@ -48,16 +56,12 @@ namespace arln {
         inline auto  getQueueIndex()              const noexcept { return m_queueFamilyIndex;     }
         inline auto  getDefaultColorFormat()      const noexcept { return m_colorFormat;          }
         inline auto  getDefaultDepthFormat()      const noexcept { return m_depthFormat;          }
-        inline auto  getHeight()                  const noexcept { return m_getHeightFunc();      }
-        inline auto  getWidth()                   const noexcept { return m_getWidthFunc();       }
+        inline auto  getWindowHeight()            const noexcept { return m_getHeightFunc();      }
+        inline auto  getWindowWidth()             const noexcept { return m_getWidthFunc();       }
         inline auto  isMeshShaderSupported()      const noexcept { return m_meshShaderSupported;  }
-        inline auto& getSurfaceCapabilities()     const noexcept { return m_surfaceCapabilities;  }
-        inline auto& getResizeCallback()          const noexcept { return m_resizeCallback;       }
-        inline auto& getInfoCallback()            const noexcept { return m_infoCallback;         }
-        inline auto& getErrorCallback()           const noexcept { return m_errorCallback;        }
-        inline auto& getPresentImage()                  noexcept { return m_swapchain.getImage(); }
-        inline auto& getSwapchain()                     noexcept { return m_swapchain;            }
-        inline auto& getFrame()                         noexcept { return m_frame;                }
+        inline auto  getCurrentExtent()           const noexcept {
+            return arln::uvec2{ m_swapchain.getExtent().width, m_swapchain.getExtent().height };
+        }
 
     private:
         void checkLayersSupport(std::span<const char*> t_layerNames) noexcept;

@@ -39,15 +39,15 @@ namespace arln {
         m_currentFrame.get().pipelinesToFree.clear();
         m_currentFrame.get().descriptorPoolsToFree.clear();
 
-        static auto previousWidth = CurrentContext()->getWidth();
-        static auto previousHeight = CurrentContext()->getHeight();
+        static auto previousWidth = CurrentContext()->getWindowWidth();
+        static auto previousHeight = CurrentContext()->getWindowHeight();
 
-        if (previousHeight != CurrentContext()->getHeight() ||
-            previousWidth != CurrentContext()->getWidth())
+        if (previousHeight != CurrentContext()->getWindowHeight() ||
+            previousWidth != CurrentContext()->getWindowWidth())
         {
             CurrentContext()->getSwapchain().recreate();
-            previousWidth = CurrentContext()->getWidth();
-            previousHeight = CurrentContext()->getHeight();
+            previousWidth = CurrentContext()->getWindowWidth();
+            previousHeight = CurrentContext()->getWindowHeight();
         }
 
         CurrentContext()->getSwapchain().acquireNextImage(
