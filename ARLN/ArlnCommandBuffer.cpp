@@ -207,13 +207,13 @@ namespace arln {
         );
     }
 
-    void CommandBuffer::bindDescriptorGraphics(Pipeline& t_pipeline, Descriptor& t_descriptor) noexcept
+    void CommandBuffer::bindDescriptorGraphics(Pipeline& t_pipeline, Descriptor& t_descriptor, u32 t_firstSet) noexcept
     {
         vkCmdBindDescriptorSets(
             *m_currentHandle,
             VK_PIPELINE_BIND_POINT_GRAPHICS,
             t_pipeline.getLayout(),
-            0,
+            t_firstSet,
             1,
             &t_descriptor.getSet(),
             0,
@@ -221,15 +221,55 @@ namespace arln {
         );
     }
 
-    void CommandBuffer::bindDescriptorCompute(Pipeline& t_pipeline, Descriptor& t_descriptor) noexcept
+    void CommandBuffer::bindDescriptorGraphics(Pipeline& t_pipeline, const std::vector<std::reference_wrapper<Descriptor>>& t_descriptors, u32 t_firstSet) noexcept
+    {
+        std::vector<VkDescriptorSet> sets(t_descriptors.size());
+        for (size_t i = sets.size(); i--; )
+        {
+            sets[i] = t_descriptors[i].get().getSet();
+        }
+
+        vkCmdBindDescriptorSets(
+            *m_currentHandle,
+            VK_PIPELINE_BIND_POINT_GRAPHICS,
+            t_pipeline.getLayout(),
+            t_firstSet,
+            static_cast<u32>(sets.size()),
+            sets.data(),
+            0,
+            nullptr
+        );
+    }
+
+    void CommandBuffer::bindDescriptorCompute(Pipeline& t_pipeline, Descriptor& t_descriptor, u32 t_firstSet) noexcept
     {
         vkCmdBindDescriptorSets(
             *m_currentHandle,
             VK_PIPELINE_BIND_POINT_COMPUTE,
             t_pipeline.getLayout(),
-            0,
+            t_firstSet,
             1,
             &t_descriptor.getSet(),
+            0,
+            nullptr
+        );
+    }
+
+    void CommandBuffer::bindDescriptorCompute(Pipeline& t_pipeline, const std::vector<std::reference_wrapper<Descriptor>>& t_descriptors, u32 t_firstSet) noexcept
+    {
+        std::vector<VkDescriptorSet> sets(t_descriptors.size());
+        for (size_t i = sets.size(); i--; )
+        {
+            sets[i] = t_descriptors[i].get().getSet();
+        }
+
+        vkCmdBindDescriptorSets(
+            *m_currentHandle,
+            VK_PIPELINE_BIND_POINT_COMPUTE,
+            t_pipeline.getLayout(),
+            t_firstSet,
+            static_cast<u32>(sets.size()),
+            sets.data(),
             0,
             nullptr
         );

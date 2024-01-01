@@ -46,8 +46,10 @@ namespace arln {
         void bindIndexBuffer16(Buffer& t_buffer) noexcept;
         void bindIndexBuffer32(Buffer& t_buffer) noexcept;
         void pushConstant(Pipeline& t_pipeline, ShaderStage t_stage, u32 t_size, void const* t_data) noexcept;
-        void bindDescriptorGraphics(Pipeline& t_pipeline, Descriptor& t_descriptor) noexcept;
-        void bindDescriptorCompute(Pipeline& t_pipeline, Descriptor& t_descriptor) noexcept;
+        void bindDescriptorGraphics(Pipeline& t_pipeline, Descriptor& t_descriptor, u32 t_firstSet = 0) noexcept;
+        void bindDescriptorGraphics(Pipeline& t_pipeline, std::vector<std::reference_wrapper<Descriptor>> const& t_descriptors, u32 t_firstSet = 0) noexcept;
+        void bindDescriptorCompute(Pipeline& t_pipeline, Descriptor& t_descriptor, u32 t_firstSet = 0) noexcept;
+        void bindDescriptorCompute(Pipeline& t_pipeline, std::vector<std::reference_wrapper<Descriptor>> const& t_descriptors, u32 t_firstSet = 0) noexcept;
         void transitionImages(std::vector<ImageTransitionInfo> const& t_transitionInfos) noexcept;
         void transitionImages(ImageTransitionInfo const& t_transitionInfo) noexcept;
         void blitImage(Image& t_src, Image& t_dst, ImageBlit const& t_blit) noexcept;
