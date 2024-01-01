@@ -60,7 +60,7 @@ auto main() -> int
                     .image = context.getPresentImage(),
                     .oldLayout = ImageLayout::eUndefined,
                     .newLayout = ImageLayout::eColorAttachment,
-                    .srcStageMask = PipelineStageBits::eTopOfPipe,
+                    .srcStageMask = PipelineStageBits::eColorAttachmentOutput,
                     .dstStageMask = PipelineStageBits::eColorAttachmentOutput,
                     .srcAccessMask = 0,
                     .dstAccessMask = AccessBits::eColorAttachmentWrite
@@ -85,7 +85,7 @@ auto main() -> int
                     .oldLayout = ImageLayout::eColorAttachment,
                     .newLayout = ImageLayout::ePresentSrc,
                     .srcStageMask = PipelineStageBits::eColorAttachmentOutput,
-                    .dstStageMask = PipelineStageBits::eBottomOfPipe,
+                    .dstStageMask = PipelineStageBits::eColorAttachmentOutput,
                     .srcAccessMask = AccessBits::eColorAttachmentWrite,
                     .dstAccessMask = 0
                 });

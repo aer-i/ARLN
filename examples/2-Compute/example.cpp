@@ -123,7 +123,7 @@ auto main() -> int
                         .image = context.getPresentImage(),
                         .oldLayout = ImageLayout::eUndefined,
                         .newLayout = ImageLayout::eTransferDst,
-                        .srcStageMask = PipelineStageBits::eTopOfPipe,
+                        .srcStageMask = PipelineStageBits::eColorAttachmentOutput,
                         .dstStageMask = PipelineStageBits::eTransfer,
                         .srcAccessMask = AccessBits::eNone,
                         .dstAccessMask = AccessBits::eTransferWrite
@@ -143,7 +143,7 @@ auto main() -> int
                     .oldLayout = ImageLayout::eTransferDst,
                     .newLayout = ImageLayout::ePresentSrc,
                     .srcStageMask = PipelineStageBits::eTransfer,
-                    .dstStageMask = PipelineStageBits::eBottomOfPipe,
+                    .dstStageMask = PipelineStageBits::eColorAttachmentOutput,
                     .srcAccessMask = AccessBits::eTransferWrite,
                     .dstAccessMask = AccessBits::eNone
                 });
