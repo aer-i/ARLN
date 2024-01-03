@@ -36,7 +36,7 @@ namespace arln {
     }
 
     DescriptorPool::DescriptorPool(std::nullptr_t) noexcept
-        : m_maxBindingCount{ 0 }
+        : m_firstSet{ }, m_maxBindingCount{ 0 }
     {
         create();
     }
@@ -104,8 +104,12 @@ namespace arln {
         }
 
         m_bindings.clear();
-
-        return { descriptorSet, m_setLayouts[t_setLayout] };
+        Descriptor result = { descriptorSet, m_setLayouts[t_setLayout]};
+        if (!m_firstSet.m_layout)
+        {
+            m_firstSet = result;
+        }
+        return result;
     }
 
     void DescriptorPool::destroy() noexcept

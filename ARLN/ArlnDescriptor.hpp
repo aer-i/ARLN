@@ -48,10 +48,13 @@ namespace arln {
         void destroy() noexcept;
         void reset() noexcept;
 
+        inline auto& getFirstDescriptor() noexcept { return m_firstSet; }
+
     private:
         std::vector<VkDescriptorPool>             m_pools;
         std::vector<VkDescriptorSetLayout>        m_setLayouts;
         std::vector<VkDescriptorSetLayoutBinding> m_bindings;
+        Descriptor                                m_firstSet;
         u32                                       m_maxBindingCount;
     };
 
