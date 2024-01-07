@@ -179,20 +179,19 @@ namespace arln {
         vkCmdSetScissor(*m_currentHandle, 0, 1, &scissor);
     }
 
-    void CommandBuffer::bindVertexBuffer(Buffer& t_buffer) noexcept
+    void CommandBuffer::bindVertexBuffer(Buffer& t_buffer, size_t t_offset, u32 t_firstBinding) noexcept
     {
-        VkDeviceSize offset = 0;
-        vkCmdBindVertexBuffers(*m_currentHandle, 0, 1, &t_buffer.getHandle(), &offset);
+        vkCmdBindVertexBuffers(*m_currentHandle, t_firstBinding, 1, &t_buffer.getHandle(), &t_offset);
     }
 
-    void CommandBuffer::bindIndexBuffer16(Buffer& t_buffer) noexcept
+    void CommandBuffer::bindIndexBuffer16(Buffer& t_buffer, size_t t_offset) noexcept
     {
-        vkCmdBindIndexBuffer(*m_currentHandle, t_buffer.getHandle(), 0, VK_INDEX_TYPE_UINT16);
+        vkCmdBindIndexBuffer(*m_currentHandle, t_buffer.getHandle(), t_offset, VK_INDEX_TYPE_UINT16);
     }
 
-    void CommandBuffer::bindIndexBuffer32(Buffer& t_buffer) noexcept
+    void CommandBuffer::bindIndexBuffer32(Buffer& t_buffer, size_t t_offset) noexcept
     {
-        vkCmdBindIndexBuffer(*m_currentHandle, t_buffer.getHandle() , 0, VK_INDEX_TYPE_UINT32);
+        vkCmdBindIndexBuffer(*m_currentHandle, t_buffer.getHandle(), t_offset, VK_INDEX_TYPE_UINT32);
     }
 
     void CommandBuffer::pushConstant(Pipeline& t_pipeline, ShaderStage t_stage, u32 t_size, void const* t_data) noexcept

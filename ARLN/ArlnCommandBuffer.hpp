@@ -42,9 +42,9 @@ namespace arln {
         void drawMeshTaskIndirectCount(Buffer& t_buffer, size_t t_offset, Buffer& t_countBuffer, size_t t_countBufferOffset, u32 t_maxDrawCount, u32 t_stride) noexcept;
         void setViewport(f32 t_x, f32 t_y, f32 t_width, f32 t_height) noexcept;
         void setScissor(i32 t_x, i32 t_y, u32 t_width, u32 t_height) noexcept;
-        void bindVertexBuffer(Buffer& t_buffer) noexcept;
-        void bindIndexBuffer16(Buffer& t_buffer) noexcept;
-        void bindIndexBuffer32(Buffer& t_buffer) noexcept;
+        void bindVertexBuffer(Buffer& t_buffer, size_t t_offset = 0, u32 t_firstBinding = 0) noexcept;
+        void bindIndexBuffer16(Buffer& t_buffer, size_t t_offset = 0) noexcept;
+        void bindIndexBuffer32(Buffer& t_buffer, size_t t_offset = 0) noexcept;
         void pushConstant(Pipeline& t_pipeline, ShaderStage t_stage, u32 t_size, void const* t_data) noexcept;
         void bindDescriptorGraphics(Pipeline& t_pipeline, Descriptor& t_descriptor, u32 t_firstSet = 0) noexcept;
         void bindDescriptorGraphics(Pipeline& t_pipeline, std::vector<std::reference_wrapper<Descriptor>> const& t_descriptors, u32 t_firstSet = 0) noexcept;
