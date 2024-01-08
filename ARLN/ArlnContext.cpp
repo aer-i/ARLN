@@ -520,7 +520,6 @@ namespace arln {
         vulkan12Features.shaderStorageImageArrayNonUniformIndexing          = true;
         vulkan12Features.shaderUniformTexelBufferArrayNonUniformIndexing    = true;
         vulkan12Features.shaderStorageTexelBufferArrayNonUniformIndexing    = true;
-        vulkan12Features.descriptorBindingUniformBufferUpdateAfterBind      = true;
         vulkan12Features.descriptorBindingSampledImageUpdateAfterBind       = true;
         vulkan12Features.descriptorBindingStorageImageUpdateAfterBind       = true;
         vulkan12Features.descriptorBindingStorageBufferUpdateAfterBind      = true;
@@ -529,7 +528,6 @@ namespace arln {
         vulkan12Features.drawIndirectCount                                  = true;
         vulkan12Features.storageBuffer8BitAccess                            = true;
         vulkan12Features.uniformAndStorageBuffer8BitAccess                  = true;
-        vulkan12Features.shaderFloat16                                      = true;
         vulkan12Features.shaderInt8                                         = true;
         vulkan12Features.samplerFilterMinmax                                = true;
         vulkan12Features.scalarBlockLayout                                  = true;
